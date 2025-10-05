@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZURA: Modesty Meets Modernity</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load JQuery for Animations -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles for Azura Aesthetic */
+        :root {
+            --color-primary: #1F2937; /* Dark Gray/Navy */
+            --color-accent: #6B7280;  /* Medium Gray */
+            --color-text: #374151;    /* Blackish */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text);
+            background-color: #f9fafb;
+            scroll-behavior: smooth;
+        }
+
+        /* Hide all pages initially except the current one */
+        .page-view {
+            display: none;
+            min-height: 80vh; /* Ensure some minimum height */
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Custom link hover for menu */
+        .nav-link {
+            transition: color 0.2s, border-bottom 0.2s;
+        }
+        .nav-link:hover {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        /* Overlay for Hero and Banners */
+        .img-overlay {
+            background-color: rgba(0, 0, 0, 0.4); /* Dark overlay for text contrast */
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Marquee specific styles */
+        #announcement-bar {
+            overflow: hidden; /* Keeps the text hidden until it scrolls into view */
+            white-space: nowrap;
+            position: relative;
+        }
+        #marquee-text {
+            display: inline-block;
+            /* Start off-screen to the right */
+            transform: translateX(100%); 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Top Announcement Bar with JQuery Marquee Effect -->
+    <div id="announcement-bar" class="bg-gray-800 text-white py-2 text-xs md:text-sm font-medium uppercase tracking-widest">
+        <!-- This is the element that will be horizontally scrolled via JQuery -->
+        <span id="marquee-text" class="px-4">FREE SHIPPING ON ALL ORDERS OVER $150 &bull; Shop the New Drop Today &bull; MODESTY MEETS MODERNITY &bull; FREE SHIPPING ON ALL ORDERS OVER $150 &bull; Shop the New Drop Today &bull; MODESTY MEETS MODERNITY</span>
+    </div>
+
+    <!-- 2. Global Header (Sticky Navigation) -->
+    <header id="global-header" class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo - Home Link -->
+            <a href="#home" class="text-2xl font-extrabold tracking-widest text-gray-900 uppercase transition duration-300 hover:text-gray-700" onclick="showPage('home')">AZURA</a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#new-drop" class="nav-link text-gray-600 hover:text-gray-900 pb-1" onclick="showPage('new-drop')">NEW DROP</a>
+                <a href="#accessories" class="nav-link text-gray-600 hover:text-gray-900 pb-1" onclick="showPage('accessories')">ACCESSORIES</a>
+                <a href="#about" class="nav-link text-gray-600 hover:text-gray-900 pb-1" onclick="showPage('about')">ABOUT US</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:text-gray-900 pb-1" onclick="showPage('contact')">CONTACT</a>
+            </nav>
+
+            <!-- Mobile Menu Button (Hamburger Icon) -->
+            <div class="md:hidden">
+                <button id="menu-button" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 py-2">
+            <a href="#new-drop" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onclick="showPage('new-drop'); closeMobileMenu();">NEW DROP</a>
+            <a href="#accessories" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onclick="showPage('accessories'); closeMobileMenu();">ACCESSORIES</a>
+            <a href="#about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onclick="showPage('about'); closeMobileMenu();">ABOUT US</a>
+            <a href="#contact" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onclick="showPage('contact'); closeMobileMenu();">CONTACT</a>
+        </nav>
+    </header>
+
+    <main class="min-h-screen">
+        <!-- 3. HOME VIEW -->
+        <section id="home" class="page-view active">
+            <!-- Hero Section (home.jpg) -->
+            <div class="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
+                <img src="uploaded:home.jpg-9651c989-0aab-458b-85ba-aa31356b68ba" alt="Azura Hero Image: Modest modern clothing" class="absolute inset-0 w-full h-full object-cover">
+                <div class="img-overlay absolute inset-0"></div>
+                <div class="relative z-10 text-center p-6 rounded-lg">
+                    <h1 class="text-4xl sm:text-6xl font-extrabold text-white uppercase tracking-wider">MODESTY MEETS MODERNITY</h1>
+                    <p class="mt-4 text-lg sm:text-xl font-light text-gray-200 max-w-2xl mx-auto">Thoughtful fabrics and clean silhouettes that keep you confident.</p>
+                    <a href="#new-drop" class="mt-8 inline-block bg-white text-gray-900 px-8 py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition hover:bg-gray-100" onclick="showPage('new-drop')">Shop New Drops</a>
+                </div>
+            </div>
+
+            <!-- New Drop Preview -->
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12 uppercase tracking-wide">New Drop Preview</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Item 1: download-removebg-preview 1.png (Beige/Brown Set) - ADJUSTED FOR ACCURACY -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:download-removebg-preview 1.png-3757b66b-170f-4a3f-b1c5-71b39cc00215" alt="Oversized Beige Hoodie and Brown Sweatpants" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">The Core Comfort Set</h3>
+                            <p class="text-xs text-gray-500 mt-1">$179 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 2: new drop.jpg (Olive Dress) -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:new drop.jpg-626e9c09-db2d-43be-972b-3ea6df9e22a5" alt="Olive Green Dress" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">Willow Tunic Dress</h3>
+                            <p class="text-xs text-gray-500 mt-1">$120 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png (Plum Set) -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png-22da1b3d-71a2-4714-a131-1c4625c92621" alt="Plum Abaya and Khimar Set" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">Plum Abaya & Khimar Set</h3>
+                            <p class="text-xs text-gray-500 mt-1">$189 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 4: download__5_-removebg-preview 1.png (Cardigan) -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:download__5_-removebg-preview 1.png-b2dc4e74-f50e-4eeb-8223-f11be4081e54" alt="Cream Tie Cardigan and Skirt" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">The Cordoba Cardigan</h3>
+                            <p class="text-xs text-gray-500 mt-1">$95 USD</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="#new-drop" class="inline-block border-2 border-gray-900 text-gray-900 px-6 py-2 rounded-full text-sm font-semibold uppercase tracking-wider transition hover:bg-gray-900 hover:text-white" onclick="showPage('new-drop')">Explore Full Collection</a>
+                </div>
+            </div>
+
+            <!-- Promotional Banner: download__6_-removebg-preview 1.jpg (Street Style) -->
+            <div class="relative h-[40vh] overflow-hidden">
+                <img src="uploaded:download__6_-removebg-preview 1.jpg-5c2c8805-304b-43e3-9ebe-6f5f43933e16" alt="Three models in street style Azura hoodies and wide-leg denim." class="absolute inset-0 w-full h-full object-cover object-center">
+                <div class="img-overlay absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-wider">TRENDING: STREET STYLE MODESTY</h3>
+                    <p class="mt-2 text-base text-gray-200">Shop our most popular relaxed fit pieces.</p>
+                    <a href="#new-drop" class="mt-6 inline-block bg-white text-gray-900 px-8 py-2 rounded-full text-sm font-semibold uppercase tracking-wider transition hover:bg-gray-100" onclick="showPage('new-drop')">View Trending</a>
+                </div>
+            </div>
+
+            <!-- Accessories Preview (Reusing accessories.jpg for all 4 for consistency) -->
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12 uppercase tracking-wide">Elevate Your Look: Accessories</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Item 1: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Navy and Cream Cap" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">The Vintage Cap</h3>
+                            <p class="text-xs text-gray-500 mt-1">$35 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 2: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Black Utility Backpack" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">Utility Backpack</h3>
+                            <p class="text-xs text-gray-500 mt-1">$110 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Black Slides" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">Essential Slides</h3>
+                            <p class="text-xs text-gray-500 mt-1">$45 USD</p>
+                        </div>
+                    </div>
+                    <!-- Item 4: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Travel Mug" class="w-full h-48 object-cover object-top">
+                        <div class="p-4 text-center">
+                            <h3 class="text-sm font-medium text-gray-900">Insulated Tumbler</h3>
+                            <p class="text-xs text-gray-500 mt-1">$28 USD</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="#accessories" class="inline-block border-2 border-gray-900 text-gray-900 px-6 py-2 rounded-full text-sm font-semibold uppercase tracking-wider transition hover:bg-gray-900 hover:text-white" onclick="showPage('accessories')">Shop Accessories</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. NEW DROP VIEW -->
+        <section id="new-drop" class="page-view">
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                <h2 class="text-5xl font-extrabold text-center mb-16 uppercase tracking-wider text-gray-900">OUR NEW DROP COLLECTION</h2>
+
+                <!-- Product Grid (8 Items - all unique product images used here) -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Item 1: download-removebg-preview 1.png (Beige/Brown Set) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:download-removebg-preview 1.png-3757b66b-170f-4a3f-b1c5-71b39cc00215" alt="Oversized Beige Hoodie and Brown Sweatpants" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Core Comfort Set</h3>
+                            <p class="text-sm text-gray-500">Beige/Brown | Relaxed Fit</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$179</p>
+                        </div>
+                    </div>
+                    <!-- Item 2: download__4_-removebg-preview 1.png (White Set) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:download__4_-removebg-preview 1.png-aaee081f-ca64-4934-aa81-48a3633403e5" alt="White Pullover and Beige Cargo Pants" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Alpine Anorak Set</h3>
+                            <p class="text-sm text-gray-500">White/Sand | Utility</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$149</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png (Plum Set) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png-22da1b3d-71a2-4714-a131-1c4625c92621" alt="Plum Abaya and Khimar Set" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Majestic Khimar Set</h3>
+                            <p class="text-sm text-gray-500">Plum | Premium Chiffon</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$189</p>
+                        </div>
+                    </div>
+                    <!-- Item 4: download__5_-removebg-preview 1.png (Cardigan) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:download__5_-removebg-preview 1.png-b2dc4e74-f50e-4eeb-8223-f11be4081e54" alt="Cream Tie-Front Cardigan and Olive Skirt" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Cordoba Cardigan</h3>
+                            <p class="text-sm text-gray-500">Cream/Olive | Lightweight</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$95</p>
+                        </div>
+                    </div>
+                    <!-- Item 5 (Reused Image to fill the slot): download__4_-removebg-preview 1.png -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:download__4_-removebg-preview 1.png-aaee081f-ca64-4934-aa81-48a3633403e5" alt="White Pullover and Beige Cargo Pants" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Oversized Linen Tunic</h3>
+                            <p class="text-sm text-gray-500">Stone Gray | Classic Cut</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$115</p>
+                        </div>
+                    </div>
+                    <!-- Item 6 (Reused Image to fill the slot): new drop.jpg -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:new drop.jpg-626e9c09-db2d-43be-972b-3ea6df9e22a5" alt="Olive Green Dress" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Seville Wide Leg</h3>
+                            <p class="text-sm text-gray-500">Charcoal | Flowing Fabric</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$85</p>
+                        </div>
+                    </div>
+                    <!-- Item 7 (Reused Image to fill the slot): download-removebg-preview 1.png -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:download-removebg-preview 1.png-3757b66b-170f-4a3f-b1c5-71b39cc00215" alt="Oversized Beige Hoodie and Brown Sweatpants" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Structured Long Vest</h3>
+                            <p class="text-sm text-gray-500">Black | Tailored Fit</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$160</p>
+                        </div>
+                    </div>
+                    <!-- Item 8 (Reused Image to fill the slot): Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:Abaya_with_Khimar_Set_-_Plum_-_58___Plum-removebg-preview 2.png-22da1b3d-71a2-4714-a131-1c4625c92621" alt="Plum Abaya and Khimar Set" class="w-full h-72 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Essential Layering Dress</h3>
+                            <p class="text-sm text-gray-500">Soft Gray | Versatile</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$130</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empowerment Banner: download (1) 1.jpg -->
+            <div class="relative h-[60vh] md:h-[70vh] flex items-center justify-center mt-16">
+                <img src="uploaded:download (1) 1.jpg-14cff70d-edff-47b3-bb0f-ea4f4f4f39dc" alt="Model wearing a green, flowing modest outfit with athletic shoes." class="absolute inset-0 w-full h-full object-cover object-center">
+                <div class="img-overlay absolute inset-0"></div>
+                <div class="relative z-10 text-center p-6 rounded-lg">
+                    <h3 class="text-4xl sm:text-5xl font-extrabold text-white uppercase tracking-wider">EMPOWERMENT, IDENTITY, AND A LIFESTYLE</h3>
+                    <p class="mt-4 text-lg font-light text-gray-200 max-w-2xl mx-auto">Soft, breathable fabrics that keep you cool, confident, and stylish.</p>
+                    <a href="#about" class="mt-8 inline-block bg-white text-gray-900 px-8 py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition hover:bg-gray-100" onclick="showPage('about')">Our Vision</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ACCESSORIES VIEW (Continuation) -->
+        <section id="accessories" class="page-view">
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                <h2 class="text-5xl font-extrabold text-center mb-16 uppercase tracking-wider text-gray-900">ELEVATE WITH AZURA ACCESSORIES</h2>
+
+                <!-- Accessories Grid (8 Items - All using accessories.jpg) -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Item 1: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Navy and Cream Cap" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Vintage Cap</h3>
+                            <p class="text-sm text-gray-500">Navy/Cream | Structured</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$35</p>
+                        </div>
+                    </div>
+                    <!-- Item 2: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Black Utility Backpack" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Utility Backpack</h3>
+                            <p class="text-sm text-gray-500">Black | Durable Canvas</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$110</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Black Slides" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Essential Slides</h3>
+                            <p class="text-sm text-gray-500">Black | Molded Footbed</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$45</p>
+                        </div>
+                    </div>
+                    <!-- Item 4: accessories.jpg -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Insulated Tumbler" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Insulated Tumbler</h3>
+                            <p class="text-sm text-gray-500">Matte Black | 20oz</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$28</p>
+                        </div>
+                    </div>
+                    <!-- Item 5: accessories.jpg (reused) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Gold Bracelet" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">The Zenith Cuff</h3>
+                            <p class="text-sm text-gray-500">Brass | Minimalist</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$60</p>
+                        </div>
+                    </div>
+                    <!-- Item 6: accessories.jpg (reused) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Silk Scarf" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Printed Silk Scarf</h3>
+                            <p class="text-sm text-gray-500">Abstract Geo | Cream</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$75</p>
+                        </div>
+                    </div>
+                    <!-- Item 7: accessories.jpg (reused) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Sunglasses" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Architect Sunglasses</h3>
+                            <p class="text-sm text-gray-500">Black | Oversized</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$55</p>
+                        </div>
+                    </div>
+                    <!-- Item 8: accessories.jpg (reused) -->
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="uploaded:accessories.jpg-c3491165-e434-49c8-afa4-f449a9c9f0e1" alt="Leather Belt" class="w-full h-64 object-cover object-top">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800">Minimalist Leather Belt</h3>
+                            <p class="text-sm text-gray-500">Brown | Genuine Leather</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">$80</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 6. ABOUT US VIEW -->
+        <section id="about" class="page-view">
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                <h2 class="text-5xl font-extrabold text-center mb-16 uppercase tracking-wider text-gray-900">OUR STORY</h2>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Text Content -->
+                    <div class="order-2 md:order-1">
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                            Azura was founded on the belief that **modesty and modernity are not mutually exclusive**. We strive to create collections that speak to the contemporary woman who values elegance, quality, and conscious design. Our journey began with a simple idea: to redefine modest wear with clean lines, functional fabrics, and timeless silhouettes.
+                        </p>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                            Every piece is meticulously crafted, focusing on premium, sustainable materials that feel as good as they look. We are dedicated to providing wardrobe staples that allow for effortless style and all-day confidence, regardless of the occasion.
+                        </p>
+                        <div class="mt-8">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Our Commitment</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-center"><span class="text-green-500 mr-2">&bull;</span> **Ethical Sourcing**: Ensuring fair labor and high-quality standards.</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">&bull;</span> **Sustainable Fabrics**: Prioritizing natural and recycled materials.</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">&bull;</span> **Timeless Design**: Creating pieces meant to last beyond seasonal trends.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Grid/Panel -->
+                    <div class="order-1 md:order-2 space-y-4">
+                        <!-- About us.jpg (Main Visual) -->
+                        <img src="uploaded:About us.jpg-ce6fe046-bdac-448b-a147-c917f886ec6d" alt="Behind the scenes at Azura studio" class="w-full h-auto rounded-xl shadow-2xl object-cover">
+                        
+                        <!-- image_d389ee.png (Secondary Detail Image) -->
+                        <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100">
+                             <img src="uploaded:image_d389ee.png-4fb88f08-973d-43e9-994c-3664220c49a5" alt="Azura quality seal or abstract design element" class="w-1/2 mx-auto h-24 object-contain opacity-70">
+                             <p class="text-center text-xs mt-2 text-gray-400">Quality Assured</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CONTACT VIEW -->
+        <section id="contact" class="page-view">
+            <!-- Contact Hero Banner (Contact.jpg) -->
+            <div class="relative h-[40vh] flex items-center justify-center mb-16">
+                <img src="uploaded:Contact.jpg-436c9245-5165-49f5-935c-6aad4ed2621b" alt="Customer service representative ready to help" class="absolute inset-0 w-full h-full object-cover object-top">
+                <div class="img-overlay absolute inset-0"></div>
+                <div class="relative z-10 text-center">
+                    <h2 class="text-5xl font-extrabold text-white uppercase tracking-wider">GET IN TOUCH</h2>
+                    <p class="mt-2 text-xl font-light text-gray-200">We're here to help.</p>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-800">Send Us a Message</h3>
+                        <form id="contact-form" onsubmit="event.preventDefault(); showContactMessage();">
+                            <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500">
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold uppercase tracking-wider transition hover:bg-gray-700">Submit Inquiry</button>
+                            <p id="form-message" class="mt-4 text-center text-sm text-green-600 hidden">Thank you for your message! We will be in touch shortly.</p>
+                        </form>
+                    </div>
+
+                    <!-- Contact Info and Image Panel -->
+                    <div class="space-y-8">
+                        <!-- Contact Info -->
+                        <div class="p-8 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-800">Contact Information</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <p class="text-gray-700">support@azuradigital.com</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.128a11.042 11.042 0 005.516 5.516l1.128-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                    <p class="text-gray-700">+1 (555) 123-4567</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-gray-600 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243m10.606-10.607l-4.242-4.243a1.998 1.998 0 00-2.828 0L7.05 6.05m10.606 0L12 10.657m-4.95 0L12 10.657m0 0l-4.243-4.243"></path></svg>
+                                    <p class="text-gray-700">Azura Digital HQ<br>123 Modesty Ave, Suite 400<br>New York, NY 10001</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- download (7) 1.png - used as a large visual element here -->
+                        <div class="rounded-xl shadow-lg overflow-hidden">
+                            <img src="uploaded:download (7) 1.png-5481884c-65b7-450e-a9e9-697f101a1e88" alt="Abstract modern art background" class="w-full h-40 object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Grid (Using remaining 3 images) -->
+                <div class="mt-16">
+                    <h3 class="text-3xl font-bold text-center mb-8 uppercase tracking-wide text-gray-800">A Look Inside</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <img src="uploaded:download (8).jpg-564395a3-9fc3-4ce2-af2e-0f184df146cd" alt="Azura studio interior shot 1" class="w-full h-64 object-cover rounded-xl shadow-md transition hover:scale-[1.02] duration-300">
+                        <img src="uploaded:download (9).jpg-1c86e228-9faf-41e5-b772-22bf750c8b7f" alt="Azura studio interior shot 2" class="w-full h-64 object-cover rounded-xl shadow-md transition hover:scale-[1.02] duration-300">
+                        <img src="uploaded:download (10) 1.jpg-b50c1c90-8642-463d-bdfb-af5a49178dca" alt="Azura studio interior shot 3" class="w-full h-64 object-cover rounded-xl shadow-md transition hover:scale-[1.02] duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 8. Global Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Col 1: Brand -->
+                <div>
+                    <h4 class="text-xl font-extrabold uppercase tracking-widest mb-4">AZURA</h4>
+                    <p class="text-sm text-gray-400">Redefining modest fashion for the modern era.</p>
+                </div>
+                <!-- Col 2: Navigation -->
+                <div>
+                    <h5 class="text-lg font-semibold mb-4">Shop</h5>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#new-drop" onclick="showPage('new-drop')" class="hover:text-white transition">New Drop</a></li>
+                        <li><a href="#accessories" onclick="showPage('accessories')" class="hover:text-white transition">Accessories</a></li>
+                        <li><a href="#" class="hover:text-white transition">Sale</a></li>
+                    </ul>
+                </div>
+                <!-- Col 3: Company -->
+                <div>
+                    <h5 class="text-lg font-semibold mb-4">Company</h5>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#about" onclick="showPage('about')" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#contact" onclick="showPage('contact')" class="hover:text-white transition">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                    </ul>
+                </div>
+                <!-- Col 4: Newsletter -->
+                <div>
+                    <h5 class="text-lg font-semibold mb-4">Stay Connected</h5>
+                    <p class="text-sm text-gray-300 mb-4">Subscribe for exclusive offers and updates.</p>
+                    <form onsubmit="event.preventDefault(); alert('Subscribed!');" class="flex">
+                        <input type="email" placeholder="Enter your email" required class="w-full px-3 py-2 text-gray-900 rounded-l-lg border-none focus:outline-none">
+                        <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-lg hover:bg-gray-700 transition duration-200">Go</button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-8 text-center text-sm text-gray-400">
+                &copy; 2025 AZURA Digital. All rights reserved. | Crafted with purpose.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Page Navigation, Mobile Menu, and Marquee -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize: Show the correct page based on the URL hash or default to 'home'
+            const initialHash = window.location.hash.substring(1) || 'home';
+            showPage(initialHash);
+            
+            // Setup Mobile Menu Toggle
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            menuButton.addEventListener('click', toggleMobileMenu);
+
+            function toggleMobileMenu() {
+                mobileMenu.classList.toggle('hidden');
+                // Change icon if needed
+                const icon = menuButton.querySelector('svg');
+                if (mobileMenu.classList.contains('hidden')) {
+                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>'; // Hamburger
+                } else {
+                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'; // X
+                }
+            }
+
+            window.closeMobileMenu = function() {
+                mobileMenu.classList.add('hidden');
+                // Reset icon to hamburger
+                const icon = menuButton.querySelector('svg');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+            }
+
+            // Marquee Effect using jQuery
+            const $marqueeText = $('#marquee-text');
+            const $announcementBar = $('#announcement-bar');
+            
+            function runMarquee() {
+                const barWidth = $announcementBar.width();
+                // Get the total width of the text inside the marquee
+                const textWidth = $marqueeText.get(0).scrollWidth;
+                
+                // Reset text position to start off-screen right
+                $marqueeText.css('transform', `translateX(${barWidth}px)`);
+
+                // Animate from right (barWidth) to left (-textWidth)
+                $marqueeText.animate(
+                    { 'textIndent': 0 }, // Dummy property for animation purposes
+                    {
+                        duration: 15000, // Speed of scroll (15 seconds)
+                        easing: 'linear',
+                        step: function(now, fx) {
+                            // Calculate current position based on normalized animation step (0 to 1)
+                            const currentTranslation = barWidth - (fx.pos * (barWidth + textWidth));
+                            $(this).css('transform', `translateX(${currentTranslation}px)`);
+                        },
+                        complete: runMarquee // Loop the animation
+                    }
+                );
+            }
+
+            // Start the marquee effect once the document is ready
+            runMarquee();
+        });
+
+        // Function to handle page navigation (called by links)
+        function showPage(pageId) {
+            // Remove active class from all pages
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Add active class to the requested page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.location.hash = pageId;
+            } else {
+                // Default to home if pageId is invalid
+                document.getElementById('home').classList.add('active');
+                window.location.hash = 'home';
+            }
+            // Ensure mobile menu is closed when a navigation action occurs
+            if (typeof closeMobileMenu === 'function') {
+                closeMobileMenu();
+            }
+        }
+
+        // Function for contact form submission feedback (since we can't use alert)
+        function showContactMessage() {
+            const formMessage = document.getElementById('form-message');
+            formMessage.classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Ensure the correct page loads if the user navigates back/forward
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            showPage(hash);
+        });
+    </script>
+</body>
+</html>
